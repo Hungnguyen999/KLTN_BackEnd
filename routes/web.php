@@ -18,6 +18,9 @@ Route::get('/', function () {
 Route::match(['get', 'post'], '/botman', 'BotManController@handle');
 Route::get('/botman/tinker', 'BotManController@tinker');
 
+Route::get('/test', function (\Illuminate\Http\Request $request) {
+    return $request->input('test');
+});
 
 Route::post('/user', 'UserController@register');
 
