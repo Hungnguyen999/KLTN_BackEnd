@@ -57,7 +57,9 @@
         ],
         "post-install-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postInstall",
-            "BotMan\\Studio\\Providers\\DriverServiceProvider::publishDriverConfigurations"
+            "BotMan\\Studio\\Providers\\DriverServiceProvider::publishDriverConfigurations",
+            "php artisan clear-compiled",
+            "chmod -R 777 public/"
         ],
         "post-update-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postUpdate",
