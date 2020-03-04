@@ -22,6 +22,7 @@ Route::get('/test', function (\Illuminate\Http\Request $request) {
     return $request->input('test');
 });
 
-Route::post('/user', 'UserController@register');
 
+
+Route::post('/user', 'UserController@register');
 Route::post('/userLogin', 'UserController@login');

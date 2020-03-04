@@ -24,6 +24,7 @@ class UserFormRequest extends FormRequest
     public function rules()
     {
         return [
+
         ];
     }
 }
