@@ -28,16 +28,10 @@ class User extends Authenticatable implements JWTSubject
     /**
      * @inheritDoc
      */
-    public function getJWTIdentifier()
-    {
+    public function getJWTIdentifier() {
         return $this->getKey();
     }
-
-    /**
-     * @inheritDoc
-     */
-    public function getJWTCustomClaims()
-    {
+    public function getJWTCustomClaims() {
         return [];
     }
 }

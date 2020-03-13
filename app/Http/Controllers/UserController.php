@@ -3,13 +3,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UserFormRequest;
 use App\User;
-use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Hash;
 use JWTAuth;
 
@@ -51,5 +47,15 @@ class UserController extends BaseController
             return $error;
         }
         return $error;
+    }
+
+    public function getUserInfo(Request $request) {
+        $data = [
+          'user' => $request->user
+        ];
+        return response()->json($data,
+            200,
+            ['Content-type'=> 'application/json; charset=utf-8'],
+            JSON_UNESCAPED_UNICODE);
     }
 }
