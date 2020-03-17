@@ -27,6 +27,11 @@ Route::get('/test', function (\Illuminate\Http\Request $request) {
 Route::post('/user', 'UserController@register');
 Route::post('/userLogin', 'UserController@login');
 
+
+Route::get('/admin', 'AdminController@register');
+Route::post('/adminLogin', 'AdminController@login');
+
+
 Route::group(['middleware' => 'jwt.auth'], function () {
     Route::get('/getUser', 'UserController@getUserInfo');
 });
