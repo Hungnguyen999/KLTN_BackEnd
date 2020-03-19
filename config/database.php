@@ -82,6 +82,7 @@ return [
             'charset' => 'utf8',
             'prefix' => '',
         ],
+        /*
         'your_heroku_mysql_connection' => array(
             'driver' => 'mysql',
             'host' => $host,
@@ -92,6 +93,7 @@ return [
             'collation' => 'utf8_unicode_ci',
             'prefix' => '',
         ),
+        */
     ],
 
     /*

@@ -46,8 +46,8 @@ class AdminController  extends BaseController
             'msg' => 'Tài khoản hoặc mật khẩu không đúng',
             'RequestSuccess' => false
         ];
-        if(($ad && Hash::check($request->password, $ad->password)) && ($request->employee == $ad->adminType_id) ) {
-            $credentials = $request->only('admin_id', 'password', $ad->adminType_id);
+        if(($ad && Hash::check($request->password, $ad->password)) && ($request->employee == $ad->admintype_id) ) {
+            $credentials = $request->only('admin_id', 'password', $ad->admintype_id);
             $token = JWTAuth::attempt($credentials);
 
             $data = [
