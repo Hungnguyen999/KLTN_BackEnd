@@ -32,6 +32,12 @@ Route::get('/admin', 'AdminController@register');
 Route::post('/adminLogin', 'AdminController@login');
 
 
+Route::get('/admin/category', 'CategoryController@getCategories');
+Route::put('/admin/category', 'CategoryController@getCategory');
+Route::post('/admin/category', 'CategoryController@insertCategory');
+Route::patch('/admin/category', 'CategoryController@updateCategory');
+Route::delete('/admin/category', 'CategoryController@deleteCategory');
+
 Route::group(['middleware' => 'jwt.auth'], function () {
     Route::get('/getUser', 'UserController@getUserInfo');
 });
