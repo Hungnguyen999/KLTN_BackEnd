@@ -17,15 +17,14 @@ class VerifyJWTToken
      */
     public function handle($request, Closure $next)
     {
-        if (! $auth = JWTAuth::parseToken()) {
+        if (!$auth = JWTAuth::parseToken()) {
         throw Exception('JWTAuth unable to parse token from request');
         } else {
             $token = $request->token;
             try {
                 $user = JWTAuth::toUser($token);
                 $request->merge([
-                    'user' => $user,
-                    'chodien' => 'la may'
+                    'user' => $user
                 ]);
             }catch (JWTException $e) {
                 if($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException) {

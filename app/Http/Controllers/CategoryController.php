@@ -13,6 +13,16 @@ use Illuminate\Support\Facades\DB;
 
 class CategoryController extends BaseController
 {
+    function __construct()
+    {
+        Config::set('jwt.user', Admin::class);
+        Config::set('jwt.identifier', 'admin_id');
+        Config::set('auth.providers', ['users' => [
+            'driver' => 'eloquent',
+            'model' => Admin::class,
+        ]]);
+    }
+
     public function getCategories() {
         $categories = Category::all();
         return [
@@ -43,7 +53,8 @@ class CategoryController extends BaseController
             $category->save();
             return [
                 'msg' => 'Thêm thành công',
-                'RequestSuccess' => true
+                'RequestSuccess' => true,
+                'list' => Category::all()
             ];
         }
         return [
@@ -71,18 +82,24 @@ class CategoryController extends BaseController
     }
 
     public function deleteCategory(Request $request) {
-        $category = Category::find($request->category_id);
-        if($category) {
-            $category->disable = false;
-            $category->save();
-            return [
-                'msg' => 'Xóa thành công',
-                'RequestSuccess' => true
-            ];
-        }
-        return [
+        $data = [
             'msg' => 'Không tìm thấy thể loại',
             'RequestSuccess' => false
         ];
+        $category = Category::find($request->category_id);
+        if($category) {
+            if($category->disable == 0) $category->disable = 1;
+            else $category->disable = 0;
+            $category->save();
+            $data =  [
+                'msg' => 'Thao tác thành công',
+                'RequestSuccess' => true,
+                'list' => Category::all()
+            ];
+        }
+        return response()->json($data,
+            200,
+            ['Content-type'=> 'application/json; charset=utf-8'],
+            JSON_UNESCAPED_UNICODE);
     }
 }
