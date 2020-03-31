@@ -16,4 +16,7 @@ class Category extends Model
         'name',
         'icon_class'
     ];
+    public function topics() {
+        return $this->hasMany(Topic::class,'category_id','category_id');
+    }
 }

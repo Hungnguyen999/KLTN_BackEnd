@@ -2,9 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use App\User;
 use Closure;
 use Tymon\JWTAuth\Exceptions\JWTException;
-use JWTAuth;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class VerifyJWTToken
 {
@@ -24,15 +25,15 @@ class VerifyJWTToken
             try {
                 $user = JWTAuth::toUser($token);
                 $request->merge([
-                    'user' => $user
+                    'user' => User::with('card')->find($user->user_id)
                 ]);
             }catch (JWTException $e) {
                 if($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException) {
-                    return response()->json(['token_expired'], $e->getStatusCode());
+                    return response()->json(['errorToken' => true, 'msg' => 'Lỗi đăng nhập, vui lòng đăng nhập lại']);
                 }else if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException) {
-                    return response()->json(['token_invalid'], $e->getStatusCode());
+                    return response()->json(['errorToken' => true, 'msg' => 'Lỗi đăng nhập, vui lòng đăng nhập lại']);
                 }else{
-                    return response()->json(['error'=>'Token is required']);
+                    return response()->json(['errorToken' => true, 'msg' => 'Lỗi đăng nhập, vui lòng đăng nhập lại']);
                 }
             }
         }

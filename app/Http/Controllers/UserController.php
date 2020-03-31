@@ -3,14 +3,30 @@
 
 namespace App\Http\Controllers;
 
+use App\Admin;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
-use JWTAuth;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends BaseController
 {
+    protected $user_id = '';
+    protected $password = '';
+
+    function __construct()
+    {
+        Config::set('jwt.user', User::class);
+        Config::set('jwt.identifier', 'user_id');
+        Config::set('auth.providers', ['users' => [
+            'driver' => 'eloquent',
+            'model' => User::class,
+        ]]);
+    }
+
+
     public function register(Request $request) {
         $us = User::find($request->user_id);
         if(!$us) {
@@ -28,7 +44,7 @@ class UserController extends BaseController
     }
 
     public function login(Request $request) {
-        $user = User::find($request->input('user_id'));
+        $user = User::with('card')->find($request->input('user_id'));
         $error = [
             'msg' => 'Tài khoản hoặc mật khẩu không đúng',
             'RequestSuccess' => false
@@ -50,12 +66,23 @@ class UserController extends BaseController
     }
 
     public function getUserInfo(Request $request) {
+
+        //JWTAuth::invalidate($request->token);
+        $user = $request->user;//User::find($request->user->user_id);
+        $token = JWTAuth::FromUser($user);
         $data = [
-          'user' => $request->user
+          'user' => $user,
+            'token' => $token
         ];
+
+
+
         return response()->json($data,
             200,
             ['Content-type'=> 'application/json; charset=utf-8'],
             JSON_UNESCAPED_UNICODE);
     }
+
+
 }
+

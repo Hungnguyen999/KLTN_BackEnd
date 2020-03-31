@@ -10,20 +10,23 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 class User extends Authenticatable implements JWTSubject
 {
     protected $table = "user";
+    public $incrementing = false;
     public $timestamps = true;
     protected $primaryKey = "user_id";
     protected $fillable = [
         'user_id', 'password', 'phone', 'name', 'cardNumber','description'
     ];
 
+    public function card() {
+        return $this->hasOne(Card::class,'user_id','user_id');
+    }
+
+
     /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
      */
-    protected $hidden = [
-        'password',
-    ];
 
     /**
      * @inheritDoc

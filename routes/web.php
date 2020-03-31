@@ -34,7 +34,7 @@ Route::post('/adminLogin', 'AdminController@login');
 
 
 
-Route::group(['middleware' => 'jwt.auth'], function () {
+Route::group(['middleware' => 'jwt.myAuth'], function () {
     Route::get('/getUser', 'UserController@getUserInfo');
 
 
@@ -43,4 +43,20 @@ Route::group(['middleware' => 'jwt.auth'], function () {
     Route::put('/admin/category', 'CategoryController@getCategory');
     Route::post('/admin/category', 'CategoryController@insertCategory');
     Route::delete('/admin/category', 'CategoryController@deleteCategory');
+    //
+    Route::patch('/admin/topic', 'TopicController@updateTopic');
+    Route::get('/admin/topic', 'TopicController@getTopics');
+    Route::put('/admin/topic', 'TopicController@getTopic');
+    Route::post('/admin/topic', 'TopicController@insertTopic');
+    Route::delete('/admin/topic', 'TopicController@deleteTopic');
+
+    // user role
+
+    Route::get('/user','UserController@getUserInfo');
+
+
+    Route::get('/user/category', 'UserCategoryController@getCategories');
+    Route::post('/user/course', 'UserCourseController@insertCourse');
+
 });
+
