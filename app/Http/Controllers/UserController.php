@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends BaseController
@@ -44,7 +45,7 @@ class UserController extends BaseController
     }
 
     public function login(Request $request) {
-        $user = User::with('card')->find($request->input('user_id'));
+        $user = User::find($request->input('user_id'));
         $error = [
             'msg' => 'Tài khoản hoặc mật khẩu không đúng',
             'RequestSuccess' => false
@@ -55,7 +56,7 @@ class UserController extends BaseController
 
             $data = [
                 'token' => $token,
-                'user' => $user,
+                'user' => User::with('card')->find($request->input('user_id')),
                 'RequestSuccess' => true
             ];
             return $data;
@@ -83,6 +84,41 @@ class UserController extends BaseController
             JSON_UNESCAPED_UNICODE);
     }
 
+    public function editInfor(Request $request) {
+        $user = $request->user;
+        $user->name = $request->name;
+        $user->address = $request->address;
+        $user->phone = $request->phone;
+        $user->save();
+        Storage::disk('public_uploads')->delete('users/'.$user->user_id.'/avatar.png');
+        Storage::disk('public_uploads')->putFileAs('users/'.$user->user_id, $request->file('avatar'), 'avatar.png');
+        return [
+            'msg' => 'Cập nhật thông tin hành công',
+            'user' => $user,
+            'RequestSuccess' => true
+        ];
+    }
+
+    public function changePassword(Request $request) {
+        $user = User::find($request->user_id);
+        if($user && Hash::check($request->password, $user->password)) {
+            $user->password = bcrypt($request->newPassword);
+            $user->save();
+            return ['msg' => 'Đổi mật khẩu thành công', 'RequestSuccess' => true, 'user' => $user];
+        }
+        return ['msg' => 'Mật khẩu hiện tại không đúng', 'RequestSuccess' => false];
+    }
+
+    public function editProfile(Request $request) {
+        $user = User::find($request->user_id);
+        $user->profile = $request->profile;
+        $user->save();
+        return [
+            'msg' => 'Cập nhật thông tin thành công',
+            'user' => $user,
+            'RequestSuccess' => true
+        ];
+    }
 
 }
 

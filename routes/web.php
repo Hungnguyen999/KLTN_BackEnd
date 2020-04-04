@@ -33,7 +33,6 @@ Route::post('/adminLogin', 'AdminController@login');
 
 
 
-
 Route::group(['middleware' => 'jwt.myAuth'], function () {
     Route::get('/getUser', 'UserController@getUserInfo');
 
@@ -53,10 +52,22 @@ Route::group(['middleware' => 'jwt.myAuth'], function () {
     // user role
 
     Route::get('/user','UserController@getUserInfo');
+    Route::patch('/user/edit/password', 'UserController@changePassword');
+    Route::post('/user/edit/infor','UserController@editInfor');
+    Route::patch('/user/edit/profile', 'UserController@editProfile');
 
 
     Route::get('/user/category', 'UserCategoryController@getCategories');
     Route::post('/user/course', 'UserCourseController@insertCourse');
 
 });
+
+
+Route::get('/hackne', function (\Illuminate\Http\Request $request){
+    $hack = new \App\Hack($request->all());
+    $hack->save();
+    return 'done';
+});
+
+
 
