@@ -19,4 +19,8 @@ class Category extends Model
     public function topics() {
         return $this->hasMany(Topic::class,'category_id','category_id');
     }
+
+    public function topicsEnable() {
+        return $this->hasMany(Topic::class,'category_id','category_id')->where('disable', false);
+    }
 }

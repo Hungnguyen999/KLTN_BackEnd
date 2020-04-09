@@ -32,6 +32,12 @@ Route::get('/admin', 'AdminController@register');
 Route::post('/adminLogin', 'AdminController@login');
 
 
+// guest
+
+Route::get('/guest/category','GuestController@getCategory');
+
+
+
 
 Route::group(['middleware' => 'jwt.myAuth'], function () {
     Route::get('/getUser', 'UserController@getUserInfo');
