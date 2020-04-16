@@ -21,8 +21,9 @@ class UserCourseController extends BaseController
         $user = $request->user;
         $course->user_id = $user->user_id;
         $course->save();
-        Storage::disk('public_uploads')->putFileAs('images/'.$course->name, $request->file('image'), $course->name.'.png');
-        $count = $request->lesson_count;
+        Storage::disk('public_uploads')->putFileAs('images/'.$course->course_id, $request->file('image'), $course->course_id.'.png');
+        /*
+         * $count = $request->lesson_count;
         for($i = 0; $i< $count; $i++) {
             $data = [
                 'title' => $request->input('lesson_title_'.$i),
@@ -37,6 +38,17 @@ class UserCourseController extends BaseController
                 ->putFileAs('videos/'.$course->name.'/'.$lesson->title, $request->file('lesson_video_'.$i),
                     $lesson->title.'.'.'mp4');
         }
-        return 'ss';
+         * */
+        return [
+            'RequestSuccess' => true,
+            'msg' => 'Tạo khóa học thành công',
+            'list' => InstructorCourse::where('user_id',$user->user_id)->get()
+        ];
     }
+
+    public function getCourses(Request $request) {
+        $user = $request->user;
+        return ['list' => InstructorCourse::where('user_id', $user->user_id)->get()];
+    }
+
 }

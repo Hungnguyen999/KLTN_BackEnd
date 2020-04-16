@@ -65,7 +65,9 @@ Route::group(['middleware' => 'jwt.myAuth'], function () {
 
     Route::get('/user/category', 'UserCategoryController@getCategories');
     Route::post('/user/course', 'UserCourseController@insertCourse');
+    Route::get('/user/course', 'UserCourseController@getCourses');
 
+    Route::get('/user/lesson', 'UserLessonController@getLessons');
 });
 
 
