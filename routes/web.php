@@ -35,7 +35,8 @@ Route::post('/adminLogin', 'AdminController@login');
 // guest
 
 Route::get('/guest/category','GuestController@getCategory');
-
+Route::get('/guest/category/topCourse', 'GuestController@getCategoryWithTopCourse');
+Route::get('/guest/bot', 'GuestChatBotController@chatBot');
 
 
 
@@ -55,6 +56,20 @@ Route::group(['middleware' => 'jwt.myAuth'], function () {
     Route::post('/admin/topic', 'TopicController@insertTopic');
     Route::delete('/admin/topic', 'TopicController@deleteTopic');
 
+    Route::post('/admin/bot/answer', "ChatBotController@insertAnswerBot");
+    Route::patch('/admin/bot/answer', "ChatBotController@updateAnswerBot");
+    Route::delete('/admin/bot/answer', "ChatBotController@deleteAnswerBot");
+
+    Route::get('/admin/bot/question', "ChatBotController@getQuestionBots");
+    Route::post('/admin/bot/question', "ChatBotController@insertQuestionBot");
+    Route::patch('/admin/bot/question', "ChatBotController@updateQuestionBot");
+    Route::delete('/admin/bot/question', "ChatBotController@deleteQuestionBot");
+
+    Route::get('/admin/bot/message', "ChatBotController@getMessageBots");
+    Route::post('/admin/bot/message', "ChatBotController@insertMessageBot");
+    Route::patch('/admin/bot/message', "ChatBotController@updateMessageBot");
+    Route::delete('/admin/bot/message', "ChatBotController@deleteMessageBot");
+
     // user role
 
     Route::get('/user','UserController@getUserInfo');
@@ -68,14 +83,17 @@ Route::group(['middleware' => 'jwt.myAuth'], function () {
     Route::get('/user/course', 'UserCourseController@getCourses');
 
     Route::get('/user/lesson', 'UserLessonController@getLessons');
+    Route::post('/user/lesson', 'UserLessonController@insertLesson');
+    Route::post('/user/lesson/edit', 'UserLessonController@updateLesson');
+
+
+
+
+    ////
+    Route::post('/messages', 'UserChatController@message');
+    Route::get('/user/message/instructor', 'UserChatController@getMyInstructors');
 });
 
 
-Route::get('/hackne', function (\Illuminate\Http\Request $request){
-    $hack = new \App\Hack($request->all());
-    $hack->save();
-    return 'done';
-});
 
-
-
+Route::get('/messages', 'UserChatController@getMessage');

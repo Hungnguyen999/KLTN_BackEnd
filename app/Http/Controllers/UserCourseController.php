@@ -33,10 +33,7 @@ class UserCourseController extends BaseController
             $lesson = new Lesson($data);
             $lesson->save();
 
-            $ext = pathinfo($request->file('lesson_video_'.$i)->getBasename());
-            Storage::disk('public_uploads')
-                ->putFileAs('videos/'.$course->name.'/'.$lesson->title, $request->file('lesson_video_'.$i),
-                    $lesson->title.'.'.'mp4');
+            insertCourse
         }
          * */
         return [

@@ -19,7 +19,7 @@ class VerifyJWTToken
     public function handle($request, Closure $next)
     {
         if (!$auth = JWTAuth::parseToken()) {
-        throw Exception('JWTAuth unable to parse token from request');
+            return response()->json(['errorToken' => true, 'msg' => 'Lỗi đăng nhập, vui lòng đăng nhập lại']);
         } else {
             $token = $request->token;
             try {

@@ -17,6 +17,8 @@ class User extends Authenticatable implements JWTSubject
         'user_id', 'password', 'phone', 'name', 'cardNumber','description'
     ];
 
+    protected $hidden = ['password'];
+
     public function card() {
         return $this->hasOne(Card::class,'user_id','user_id');
     }
