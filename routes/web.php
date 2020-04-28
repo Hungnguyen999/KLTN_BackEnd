@@ -38,18 +38,12 @@ Route::get('/guest/category','GuestController@getCategory');
 Route::get('/guest/category/topCourse', 'GuestController@getCategoryWithTopCourse');
 Route::get('/guest/bot', 'GuestChatBotController@chatBot');
 
-<<<<<<< Updated upstream
-Route::get('/guest/course/getListComment','GuestDetailController@getListComment');
-Route::get('/guest/course/getTop5CourseByTopic','GuestDetailController@getTop5CourseByTopic');
-Route::get('/guest/course/getDetailCourse','GuestDetailController@getDetailCourse');
-Route::get('/guest/course/infoInstructor','GuestDetailController@getInfoInstructor');
-=======
+
 //hung
 Route::get('/guest/course/getlistcomment','GuestDetailCourseController@getListComment');
 Route::get('/guest/course/gettop5course','GuestDetailCourseController@getTop5CourseByTopic');
 Route::get('/guest/course/getdetailcourse','GuestDetailCourseController@getDetailCourse');
 Route::get('/guest/course/getinfoinstructor','GuestDetailCourseController@getInfoInstructor');
->>>>>>> Stashed changes
 
 Route::group(['middleware' => 'jwt.myAuth'], function () {
     Route::get('/getUser', 'UserController@getUserInfo');
@@ -106,18 +100,9 @@ Route::group(['middleware' => 'jwt.myAuth'], function () {
     Route::post('/messages', 'UserChatController@message');
     Route::get('/user/message/instructor', 'UserChatController@getMyInstructors');
 
-<<<<<<< Updated upstream
-
-
-    Route::post('/user/course/insertcomment','GuestDetailController@insertComment');
-    Route::post('/addToCart', 'UserCartController@addToCart');
-    Route::post('/carts','UserCartController@getCarts');
-    Route::delete('/deleteCarts', 'UserCartController@deleteCarts');
-=======
     Route::post('/user/course/insertcomment','GuestDetailCourseController@insertComment');
     Route::post('/user/addtocart','UserCartController@addToCart');
     Route::post('/user/getcart','UserCartController@getCarts');
->>>>>>> Stashed changes
 });
 
 
