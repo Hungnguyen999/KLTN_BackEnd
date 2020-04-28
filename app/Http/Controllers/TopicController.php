@@ -10,7 +10,7 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 
-class TopicController
+class TopicController extends BaseController
 {
     function __construct()
     {
