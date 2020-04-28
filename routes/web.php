@@ -38,7 +38,10 @@ Route::get('/guest/category','GuestController@getCategory');
 Route::get('/guest/category/topCourse', 'GuestController@getCategoryWithTopCourse');
 Route::get('/guest/bot', 'GuestChatBotController@chatBot');
 
-
+Route::get('/guest/course/getListComment','GuestDetailController@getListComment');
+Route::get('/guest/course/getTop5CourseByTopic','GuestDetailController@getTop5CourseByTopic');
+Route::get('/guest/course/getDetailCourse','GuestDetailController@getDetailCourse');
+Route::get('/guest/course/infoInstructor','GuestDetailController@getInfoInstructor');
 
 Route::group(['middleware' => 'jwt.myAuth'], function () {
     Route::get('/getUser', 'UserController@getUserInfo');
@@ -86,12 +89,21 @@ Route::group(['middleware' => 'jwt.myAuth'], function () {
     Route::post('/user/lesson', 'UserLessonController@insertLesson');
     Route::post('/user/lesson/edit', 'UserLessonController@updateLesson');
 
+    Route::get('/user/courseLike', 'UserCourseLikeController@getLikeList');
+    Route::post('/user/courseLike', 'UserCourseLikeController@likeOrUnlike');
 
 
 
     ////
     Route::post('/messages', 'UserChatController@message');
     Route::get('/user/message/instructor', 'UserChatController@getMyInstructors');
+
+
+
+    Route::post('/user/course/insertcomment','GuestDetailController@insertComment');
+    Route::post('/addToCart', 'UserCartController@addToCart');
+    Route::post('/carts','UserCartController@getCarts');
+    Route::delete('/deleteCarts', 'UserCartController@deleteCarts');
 });
 
 
