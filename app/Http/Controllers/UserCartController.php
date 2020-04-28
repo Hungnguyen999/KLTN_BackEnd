@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 
 use App\Cart;
 use App\Cart_Course;
-use App\InstructorCourse;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserCartController extends BaseController
 {

@@ -10,7 +10,10 @@ class Cart extends Model
 {
     protected $table = "cart";
     protected $primaryKey = "user_id";
+<<<<<<< Updated upstream
     public $incrementing = false;
 
 
+=======
+>>>>>>> Stashed changes
 }
