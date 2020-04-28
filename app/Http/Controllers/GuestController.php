@@ -4,6 +4,7 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\CourseComment;
 use App\Lesson;
 use FFMpeg\FFProbe;
 use Illuminate\Routing\Controller as BaseController;
@@ -25,13 +26,14 @@ class GuestController extends BaseController
                 ->join('topic_course','topic_course.topic_id','=','topic.topic_id')
                 ->join('instructor_course','instructor_course.course_id','=','topic_course.course_id')
                 ->join('student_course','student_course.course_id', '=', 'instructor_course.course_id')
+                ->join('user','user.user_id','=','instructor_course.user_id')
                 ->where('category.category_id','=',$category->category_id)
                 ->where('instructor_course.public','=',1)
                 ->where('instructor_course.disable','=',0)
-                ->select( 'instructor_course.course_id','instructor_course.user_id as author'
+                ->select( 'instructor_course.course_id','user.name as author'
                     ,'description','instructor_course.name',DB::raw("count('student_course.course_id') as CourseCount"))
                 ->orderBy('CourseCount', 'desc')
-                ->groupBy('category.category_id', 'instructor_course.user_id','description','topic.topic_id','instructor_course.course_id', 'instructor_course.name','student_course.course_id')
+                ->groupBy('category.category_id', 'user.name','description','topic.topic_id','instructor_course.course_id', 'instructor_course.name','student_course.course_id')
                 ->take(10)
                 ->get();
             foreach ($courseTopList as $course) {
@@ -52,9 +54,20 @@ class GuestController extends BaseController
                         ->format($base_video_url)
                         ->get('duration');
                 }
+                $priceTier = DB::table('instructor_course')
+                    ->join('pricetier','pricetier.priceTier_id','=','instructor_course.priceTier_id')
+                    ->where('instructor_course.course_id','=',$course->course_id)
+                    ->select('priceTier')
+                    ->first();
+                $courseComment = CourseComment::where('course_id', $course->course_id)
+                    ->select(DB::raw("COUNT('*') as COUNT"))
+                    ->first();
                 $course->totalVideo = $lessonList->count();
                 $course->totalTime = gmdate('H:i:s', $totalTime);
+                $course->priceTier = $priceTier->priceTier;
                 $course->whatLearn = $wl;
+                $course->commentCount = $courseComment->COUNT;
+                $course->rating = $courseComment->sum('rating_value');
             }
             $category->topCourseList = $courseTopList;
         }
