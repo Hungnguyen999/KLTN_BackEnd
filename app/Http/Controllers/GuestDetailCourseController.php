@@ -150,8 +150,8 @@ class GuestDetailCourseController extends BaseController
                         $lessonList = DB::table('lesson')->where('course_id','=', $cs->course_id)->get();
                         $totalTime = 0;
                         $config = [
-                            'ffmpeg.binaries' => 'C:/ffmpeg/bin/ffmpeg.exe',
-                            'ffprobe.binaries' => 'C:/ffmpeg/bin/ffprobe.exe',
+                            'ffmpeg.binaries' => 'ffmpeg/bin/ffmpeg.exe',
+                            'ffprobe.binaries' => 'ffmpeg/bin/ffprobe.exe',
                             'timeout' => 3600, // The timeout for the underlying process
                             'ffmpeg.threads' => 12, // The number of threads that FFMpeg should use
                         ];
