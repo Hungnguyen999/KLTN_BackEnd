@@ -18,9 +18,7 @@ Route::get('/', function () {
 Route::match(['get', 'post'], '/botman', 'BotManController@handle');
 Route::get('/botman/tinker', 'BotManController@tinker');
 
-Route::get('/test', function (\Illuminate\Http\Request $request) {
-    return $request->input('test');
-});
+
 
 
 
@@ -38,16 +36,26 @@ Route::get('/guest/category','GuestController@getCategory');
 Route::get('/guest/category/topCourse', 'GuestController@getCategoryWithTopCourse');
 Route::get('/guest/bot', 'GuestChatBotController@chatBot');
 
+Route::get('/user/forgotPassword', 'UserController@forgotPassword');
+Route::post('/user/forgotPassword', 'UserController@afterForgotPassword');
 
+Route::get('/customerVerify', function (\Illuminate\Http\Request $request) {
+    return $request->all();
+})->name('customerVerify');
 //hung
-Route::get('/guest/course/getlistcomment','GuestDetailCourseController@getListComment');
-Route::get('/guest/course/gettop5course','GuestDetailCourseController@getTop5CourseByTopic');
-Route::get('/guest/course/getdetailcourse','GuestDetailCourseController@getDetailCourse');
-Route::get('/guest/course/getinfoinstructor','GuestDetailCourseController@getInfoInstructor');
+//Route::get('/guest/course/getlistcomment','GuestDetailCourseController@getListComment');
+//Route::get('/guest/course/gettop5course','GuestDetailCourseController@getTop5CourseByTopic');
+//Route::get('/guest/course/getdetailcourse','GuestDetailCourseController@getDetailCourse');
+//Route::get('/guest/course/getinfoinstructor','GuestDetailCourseController@getInfoInstructor');
+
+
+Route::get('/guest/course','GuestDetailCourseController@getDetailCourse');
 
 Route::group(['middleware' => 'jwt.myAuth'], function () {
     Route::get('/getUser', 'UserController@getUserInfo');
-
+    Route::get('/test', function (\Illuminate\Http\Request $request) {
+        return 'ahihi';
+    });
 
     Route::patch('/admin/category', 'CategoryController@updateCategory');
     Route::get('/admin/category', 'CategoryController@getCategories');
@@ -86,6 +94,8 @@ Route::group(['middleware' => 'jwt.myAuth'], function () {
     Route::get('/user/category', 'UserCategoryController@getCategories');
     Route::post('/user/course', 'UserCourseController@insertCourse');
     Route::get('/user/course', 'UserCourseController@getCourses');
+    Route::patch('/user/course', 'UserCourseController@publicOrUnPublicCourse');
+    Route::get('/user/course/priceTier', 'UserCourseController@getPriceTier');
 
     Route::get('/user/lesson', 'UserLessonController@getLessons');
     Route::post('/user/lesson', 'UserLessonController@insertLesson');
@@ -93,6 +103,15 @@ Route::group(['middleware' => 'jwt.myAuth'], function () {
 
     Route::get('/user/courseLike', 'UserCourseLikeController@getLikeList');
     Route::post('/user/courseLike', 'UserCourseLikeController@likeOrUnlike');
+
+    Route::get('/user/cart', 'UserCartController@getCarts');
+    Route::post('/user/cart', 'UserCartController@addToCart');
+    Route::delete('/user/cart', 'UserCartController@deleteCarts');
+
+
+
+
+
 
 
 
@@ -108,3 +127,7 @@ Route::group(['middleware' => 'jwt.myAuth'], function () {
 
 
 Route::get('/messages', 'UserChatController@getMessage');
+
+
+Route::get('/redirect/{social}', 'SocialAuthController@redirect');
+Route::get('/callback/{social}', 'SocialAuthController@callback');

@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -117,6 +118,49 @@ class UserController extends BaseController
             'msg' => 'Cập nhật thông tin thành công',
             'user' => $user,
             'RequestSuccess' => true
+        ];
+    }
+
+    public function forgotPassword(Request $request) {
+        $user_id = $request->user_id;
+        $user = User::find($user_id);
+        if($user) {
+            $code = bcrypt(md5(time().$user->user_id));
+            $user->active_code = $code;
+            $user->save();
+
+            //$url = route('http://localhost:8081/forgotPassword',['user_id' => $user_id, 'code' => $code ]);
+            $url = 'http://localhost:8081/forgotPassword?code='.$code.'&user_id='.$user_id;
+            $data = array('name'=>$user->name , "url" => $url );
+            Mail::send('mail', $data, function($message) use($user_id) {
+                $message->to($user_id,'')->subject
+                ('Xác thực quên mật khẩu');
+                $message->from('16110267@student.hcmute.edu.vn','vinh');
+            });
+            return [
+                'msg' => 'Vui lòng đăng nhập vào mail để xác thực!',
+                'RequestSuccess' => true
+            ];
+        } else {
+            return ['msg' => 'Tài khoản không tồn tại', 'RequestSucces' => false];
+
+        }
+    }
+
+    public function afterForgotPassword(Request $request) {
+        $user = User::find($request->user_id);
+        if($user && $user->active_code == $request->code) {
+            $user->password = bcrypt($request->password);
+            $user->active_code = null;
+            $user->save();
+            return [
+                'msg' => 'Thay đổi thành công',
+                'RequestSuccess' => true
+            ];
+        }
+        return [
+            'RequestSuccess' => false,
+            'msg' => 'Đã có lỗi xảy ra !!!'
         ];
     }
 

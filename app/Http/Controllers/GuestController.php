@@ -33,6 +33,7 @@ class GuestController extends BaseController
                 ->select( 'instructor_course.course_id','user.name as author'
                     ,'description','instructor_course.name',DB::raw("count('student_course.course_id') as CourseCount"))
                 ->orderBy('CourseCount', 'desc')
+                ->distinct()
                 ->groupBy('category.category_id', 'user.name','description','topic.topic_id','instructor_course.course_id', 'instructor_course.name','student_course.course_id')
                 ->take(10)
                 ->get();
@@ -40,15 +41,15 @@ class GuestController extends BaseController
                 $wl = DB::table('what_learn_instructor_course')->where('course_id','=',$course->course_id)->get();
                 $lessonList = DB::table('lesson')->where('course_id','=', $course->course_id)->get();
                 $totalTime = 0;
+                $config = [
+                    'ffmpeg.binaries' => 'C:/ffmpeg/bin/ffmpeg.exe',
+                    'ffprobe.binaries' => 'C:/ffmpeg/bin/ffprobe.exe',
+                    'timeout' => 3600, // The timeout for the underlying process
+                    'ffmpeg.threads' => 12, // The number of threads that FFMpeg should use
+                ];
+                $ffprobe = FFProbe::create($config);
                 foreach ($lessonList as $lesson) {
-                    $config = [
-                        'ffmpeg.binaries' => 'C:/ffmpeg/bin/ffmpeg.exe',
-                        'ffprobe.binaries' => 'C:/ffmpeg/bin/ffprobe.exe',
-                        'timeout' => 3600, // The timeout for the underlying process
-                        'ffmpeg.threads' => 12, // The number of threads that FFMpeg should use
-                    ];
-                    $ffprobe = FFProbe::create($config);
-                    $base_video_url = "http://localhost:8080/KLTN-Server/public/uploads/videos".'/'
+                    $base_video_url = "https://localhost/KLTN-Server/public/uploads/videos".'/'
                         .$course->course_id.'/'.$lesson->lesson_id.'.mp4';
                     $totalTime += $ffprobe
                         ->format($base_video_url)
@@ -62,12 +63,23 @@ class GuestController extends BaseController
                 $courseComment = CourseComment::where('course_id', $course->course_id)
                     ->select(DB::raw("COUNT('*') as COUNT"))
                     ->first();
+                $topicEnable = DB::table('topic_course')
+                        ->where('course_id', $course->course_id)
+                        ->join('topic', 'topic.topic_id', '=','topic_course.topic_id')
+                        ->where('topic.disable', false)
+                        ->select('topic.topic_id','topic.name')
+                        ->get();
+
+                $course->topicEnable = $topicEnable;
                 $course->totalVideo = $lessonList->count();
                 $course->totalTime = gmdate('H:i:s', $totalTime);
                 $course->priceTier = $priceTier->priceTier;
                 $course->whatLearn = $wl;
                 $course->commentCount = $courseComment->COUNT;
-                $course->rating = $courseComment->sum('rating_value');
+                if($courseComment->COUNT > 0)
+                    $course->rating = $courseComment->sum('rating_value') / $courseComment->COUNT;
+                else
+                    $course->rating = 0;
             }
             $category->topCourseList = $courseTopList;
         }

@@ -14,13 +14,19 @@ class User extends Authenticatable implements JWTSubject
     public $timestamps = true;
     protected $primaryKey = "user_id";
     protected $fillable = [
-        'user_id', 'password', 'phone', 'name', 'cardNumber','description'
+        'user_id', 'password', 'phone', 'name', 'cardNumber','description','active_code'
     ];
 
-    protected $hidden = ['password'];
 
     public function card() {
         return $this->hasOne(Card::class,'user_id','user_id');
+    }
+
+
+    public function ins_courses() {
+        return $this->hasMany(InstructorCourse::class,'user_id','user_id')
+            ->where('public', 1)
+            ->where('disable',0);
     }
 
 
