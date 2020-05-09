@@ -41,9 +41,15 @@ class GuestController extends BaseController
                 $wl = DB::table('what_learn_instructor_course')->where('course_id','=',$course->course_id)->get();
                 $lessonList = DB::table('lesson')->where('course_id','=', $course->course_id)->get();
                 $totalTime = 0;
+                //   /app/vendor/ffmpeg_bundle/ffmpeg/bin/ffmpeg
+                //   /app/vendor/ffmpeg_bundle/ffmpeg/bin/ffprobe
+
+                //
+//                        'ffmpeg.binaries' => 'ffmpeg/bin/ffmpeg.exe',
+//                            'ffprobe.binaries' => 'ffmpeg/bin/ffprobe.exe',
                 $config = [
-                    'ffmpeg.binaries' => '/ffmpeg/bin/ffmpeg.exe',
-                    'ffprobe.binaries' => '/ffmpeg/bin/ffprobe.exe',
+                    'ffmpeg.binaries' => '/app/vendor/ffmpeg_bundle/ffmpeg/bin/ffmpeg',
+                    'ffprobe.binaries' => '/app/vendor/ffmpeg_bundle/ffmpeg/bin/ffprobe',
                     'timeout' => 3600, // The timeout for the underlying process
                     'ffmpeg.threads' => 12, // The number of threads that FFMpeg should use
                 ];
