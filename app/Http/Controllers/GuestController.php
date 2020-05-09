@@ -43,9 +43,10 @@ class GuestController extends BaseController
                 $totalTime = 0;
                 //   /app/vendor/ffmpeg_bundle/ffmpeg/bin/ffmpeg
                 //   /app/vendor/ffmpeg_bundle/ffmpeg/bin/ffprobe
+                // ahihi
                 $config = [
-                    'ffmpeg.binaries' => '/ffmpeg/bin/ffmpeg.exe',
-                    'ffprobe.binaries' => '/ffmpeg/bin/ffprobe.exe',
+                    'ffmpeg.binaries' => './ffmpeg/bin/ffmpeg.exe',
+                    'ffprobe.binaries' => './ffmpeg/bin/ffprobe.exe',
                     'timeout' => 3600, // The timeout for the underlying process
                     'ffmpeg.threads' => 12, // The number of threads that FFMpeg should use
                 ];
