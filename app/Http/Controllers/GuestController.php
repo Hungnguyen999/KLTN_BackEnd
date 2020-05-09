@@ -50,13 +50,14 @@ class GuestController extends BaseController
                     'timeout' => 3600, // The timeout for the underlying process
                     'ffmpeg.threads' => 12, // The number of threads that FFMpeg should use
                 ];
-                $ffprobe = FFProbe::create($config);
+                //$ffprobe = FFProbe::create($config);
                 foreach ($lessonList as $lesson) {
                     $base_video_url = "https://localhost/KLTN-Server/public/uploads/videos".'/'
                         .$course->course_id.'/'.$lesson->lesson_id.'.mp4';
-                    $totalTime += $ffprobe
-                        ->format($base_video_url)
-                        ->get('duration');
+                    $totalTime += 0;
+                        //$ffprobe
+                        //                        ->format($base_video_url)
+                        //                        ->get('duration');
                 }
                 $priceTier = DB::table('instructor_course')
                     ->join('pricetier','pricetier.priceTier_id','=','instructor_course.priceTier_id')
