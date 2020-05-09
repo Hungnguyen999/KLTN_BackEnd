@@ -131,3 +131,5 @@ Route::get('/messages', 'UserChatController@getMessage');
 
 Route::get('/redirect/{social}', 'SocialAuthController@redirect');
 Route::get('/callback/{social}', 'SocialAuthController@callback');
+
+Route::get('/user/payment', 'VNPayController@create');
