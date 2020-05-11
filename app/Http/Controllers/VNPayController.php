@@ -4,7 +4,7 @@
 namespace App\Http\Controllers;
 
 
-use http\Env\Request;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 
 class VNPayController extends BaseController
@@ -13,14 +13,16 @@ class VNPayController extends BaseController
     {
         session(['cost_id' => $request->id]);
         session(['url_prev' => url()->previous()]);
-        $vnp_TmnCode = "UDOPNWS1"; //Mã website tại VNPAY
-        $vnp_HashSecret = "EBAHADUGCOEWYXCMYZRMTMLSHGKNRPBN"; //Chuỗi bí mật
+        //SZM993R4
+        //JJUZVZFGCCQFLRAHFQYAXHNTPOWAMIDT
+        $vnp_TmnCode = "8ZOGO9RW"; //Mã website tại VNPAY
+        $vnp_HashSecret = "KDASWVSUZEFSCKKWZPRQEEKFIAHQZULP"; //Chuỗi bí mật
         $vnp_Url = "http://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-        $vnp_Returnurl = "http://localhost:8000/return-vnpay";
+        $vnp_Returnurl = "http://goodlearning.com/callbackVPN";
         $vnp_TxnRef = date("YmdHis"); //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
         $vnp_OrderInfo = "Thanh toán hóa đơn phí dich vụ";
         $vnp_OrderType = 'billpayment';
-        $vnp_Amount = $request->input('amount') * 100;
+        $vnp_Amount = 50000 * 100;
         $vnp_Locale = 'vn';
         $vnp_IpAddr = request()->ip();
 
@@ -62,7 +64,6 @@ class VNPayController extends BaseController
             $vnpSecureHash = hash('sha256', $vnp_HashSecret . $hashdata);
             $vnp_Url .= 'vnp_SecureHashType=SHA256&vnp_SecureHash=' . $vnpSecureHash;
         }
-        return 'ahihi';
         return redirect($vnp_Url);
     }
 }
