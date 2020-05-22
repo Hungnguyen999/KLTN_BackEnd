@@ -78,7 +78,7 @@ class UserLessonController extends BaseController
                 Storage::disk('public_uploads')->delete('videos/'.$course->course_id.'/'.$lesson->lesson_id.'.mp4');
                 Storage::disk('public_uploads')
                     ->putFileAs('videos/'.$course->course_id, $request->file('video'),
-                        $lesson->title.'.'.'mp4');
+                        $lesson->lesson_id.'.'.'mp4');
 
 
 

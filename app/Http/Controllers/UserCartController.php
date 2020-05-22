@@ -52,30 +52,37 @@ class UserCartController extends BaseController
                     ];
                 }
             } else {
-                if(!Cart::where('user_id', $user->user_id)->where('course_id', $request->course_id)->first()) {
-                    $user = $request->user;
-                    $cart = new Cart();
-                    $cart->user_id = $user->user_id;
-                    $cart->course_id = $request->course_id;
-                    $cart->save();
-
-                    $courseList = DB::table('cart')->where('user_id',$user->user_id)->select('course_id')->get();
-                    $tempCourseList = [];
-                    foreach ($courseList as $course) {
-                        $temp = InstructorCourse::with('priceTier', 'instructor')->find($course->course_id);
-                        array_push($tempCourseList, $temp);
-                    }
-
+                $stuCourse = StudentCourse::where('user_id', $user->user_id)->where('course_id', $course->course_id)->first();
+                if($stuCourse) {
                     return [
-                        'msg' => 'Thêm thành công',
-                        'RequestSuccess' => true,
-                        'list' => $tempCourseList
+                        'msg' => 'Khóa học đã tồn tại trong kho',
+                        'RequestSuccess' => false
+                    ];
+                }else {
+                    if(!Cart::where('user_id', $user->user_id)->where('course_id', $request->course_id)->first()) {
+                        $user = $request->user;
+                        $cart = new Cart();
+                        $cart->user_id = $user->user_id;
+                        $cart->course_id = $request->course_id;
+                        $cart->save();
+
+                        $courseList = DB::table('cart')->where('user_id',$user->user_id)->select('course_id')->get();
+                        $tempCourseList = [];
+                        foreach ($courseList as $course) {
+                            $temp = InstructorCourse::with('priceTier', 'instructor')->find($course->course_id);
+                            array_push($tempCourseList, $temp);
+                        }
+                        return [
+                            'msg' => 'Thêm thành công',
+                            'RequestSuccess' => true,
+                            'list' => $tempCourseList
+                        ];
+                    }
+                    return [
+                        'msg' => 'Khóa học đã có trong giỏ hàng',
+                        'RequestSuccess' => false
                     ];
                 }
-                return [
-                    'msg' => 'Khóa học đã có trong giỏ hàng',
-                    'RequestSuccess' => false
-                ];
             }
         }
         return [ 'msg' => 'Không tìm thấy khóa học', 'RequestSuccess' => false ];
@@ -84,6 +91,7 @@ class UserCartController extends BaseController
     {
         $user = $request->user;
         $courseList = DB::table('cart')->where('user_id',$user->user_id)->select('course_id')->get();
+
         $tempCourseList = [];
         foreach ($courseList as $course) {
             $temp = InstructorCourse::with('priceTier', 'instructor')->find($course->course_id);

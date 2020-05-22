@@ -17,4 +17,8 @@ class Topic extends Model
             ->belongsToMany(InstructorCourse::class,'topic_course','topic_id','course_id')
             ->where('disable', false);
     }
+
+    public function category() {
+        return $this->belongsTo(Category::class, 'category_id','category_id');
+    }
 }

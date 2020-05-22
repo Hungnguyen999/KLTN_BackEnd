@@ -4,9 +4,11 @@
 namespace App\Http\Controllers;
 use App\SocialType;
 use App\User;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Socialite\Facades\Socialite;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -23,8 +25,11 @@ class SocialAuthController extends BaseController
             'model' => User::class,
         ]]);
     }
-    public function redirect($social)
+    public function redirect(Request $request)
     {
+        $social = $request->social;
+        $currentURL = $request->currentURL;
+        Session::put('currentURL', $currentURL);
         return Socialite::driver($social)->redirect();
     }
 
@@ -47,7 +52,8 @@ class SocialAuthController extends BaseController
             if (! $token = JWTAuth::fromUser($user)) {
                 return response()->json(['error' => 'invalid_credentials', 'user' => $user], 401);
             } else {
-                return redirect('http://localhost:8081?token='.$token);
+                $currentURL = Session::get('currentURL');
+                return redirect($currentURL.'?token='.$token);
             }
             return $token;
         } catch (JWTException $e) {

@@ -35,9 +35,9 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
     'facebook' => [
-        'client_id' => '2497525430347333',//env('FACEBOOK_APP_ID'),
-        'client_secret' => '239587f6b72e999bcc3ae9a0f3d55d5e',//env('FACEBOOK_APP_SECRET'),
-        'redirect' => 'https://localhost/KLTN-Server/public/callback/facebook',//env('FACEBOOK_APP_CALLBACK_URL'),
+        'client_id' => env('FACEBOOK_APP_ID'),
+        'client_secret' => env('FACEBOOK_APP_SECRET'),
+        'redirect' => env('FACEBOOK_APP_CALLBACK_URL'),
     ],
     'github' => [
         'client_id' => env('GITHUB_APP_ID'),

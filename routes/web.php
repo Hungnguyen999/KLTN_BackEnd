@@ -36,6 +36,8 @@ Route::get('/guest/category','GuestController@getCategory');
 Route::get('/guest/category/topCourse', 'GuestController@getCategoryWithTopCourse');
 Route::get('/guest/bot', 'GuestChatBotController@chatBot');
 
+Route::get('/guest/search', 'GuestSearchController@getItemsSearch');
+
 Route::get('/user/forgotPassword', 'UserController@forgotPassword');
 Route::post('/user/forgotPassword', 'UserController@afterForgotPassword');
 
@@ -110,10 +112,12 @@ Route::group(['middleware' => 'jwt.myAuth'], function () {
 
 
 
-
-
-
-
+    Route::get('/user/payment', 'VNPayController@create');
+    Route::get('/user/student/courses', 'UserCourseController@studentGetCourses');
+    Route::get('/user/student/lesson', 'UserStudentLessonController@getLesson');
+    Route::get('/user/student/lesson/comment', 'UserStudentLessonController@getComments');
+    Route::post('/user/student/lesson/comment', 'UserStudentLessonController@insertComment');
+    Route::delete('/user/student/lesson/comment', 'UserStudentLessonController@deleteComment');
 
     ////
     Route::post('/messages', 'UserChatController@message');
@@ -132,4 +136,4 @@ Route::get('/messages', 'UserChatController@getMessage');
 Route::get('/redirect/{social}', 'SocialAuthController@redirect');
 Route::get('/callback/{social}', 'SocialAuthController@callback');
 
-Route::get('/user/payment', 'VNPayController@create');
+Route::get('/callbackVPN', 'VNPayController@callback');

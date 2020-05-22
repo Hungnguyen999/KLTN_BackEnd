@@ -31,10 +31,10 @@ class GuestController extends BaseController
                 ->where('instructor_course.public','=',1)
                 ->where('instructor_course.disable','=',0)
                 ->select( 'instructor_course.course_id','user.name as author'
-                    ,'description','instructor_course.name',DB::raw("count('student_course.course_id') as CourseCount"))
+                    ,'description','instructor_course.name', 'instructor_course.updated_at',DB::raw("count('student_course.course_id') as CourseCount"))
                 ->orderBy('CourseCount', 'desc')
                 ->distinct()
-                ->groupBy('category.category_id', 'user.name','description','topic.topic_id','instructor_course.course_id', 'instructor_course.name','student_course.course_id')
+                ->groupBy('instructor_course.updated_at','category.category_id', 'user.name','description','topic.topic_id','instructor_course.course_id', 'instructor_course.name','student_course.course_id')
                 ->take(10)
                 ->get();
             foreach ($courseTopList as $course) {
@@ -55,9 +55,7 @@ class GuestController extends BaseController
                     $base_video_url = "https://localhost/KLTN-Server/public/uploads/videos".'/'
                         .$course->course_id.'/'.$lesson->lesson_id.'.mp4';
                     $totalTime +=
-                        $ffprobe
-                                                ->format($base_video_url)
-                                                ->get('duration');
+                        $ffprobe->format($base_video_url)->get('duration');
                 }
                 $priceTier = DB::table('instructor_course')
                     ->join('pricetier','pricetier.priceTier_id','=','instructor_course.priceTier_id')
