@@ -10,4 +10,5 @@ class PriceTier extends Model
 {
     protected $table = "pricetier";
     protected $primaryKey = "priceTier_id";
+    public $timestamps = false;
 }

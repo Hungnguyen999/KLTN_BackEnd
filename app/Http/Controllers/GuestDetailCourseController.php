@@ -155,14 +155,18 @@ class GuestDetailCourseController extends BaseController
 //
 //                        'ffmpeg.binaries' => 'ffmpeg/bin/ffmpeg.exe',
 //                            'ffprobe.binaries' => 'ffmpeg/bin/ffprobe.exe',
+
                         $config = [
-                            'ffmpeg.binaries' => './ffmpeg/bin/ffmpeg.exe',
-                            'ffprobe.binaries' => './ffmpeg/bin/ffprobe.exe',
+                            
+                            'ffmpeg.binaries' => 'C:/ffmpeg/bin/ffmpeg.exe',
+                            'ffprobe.binaries' => 'C:/ffmpeg/bin/ffprobe.exe',
                             'timeout' => 3600, // The timeout for the underlying process
                             'ffmpeg.threads' => 12, // The number of threads that FFMpeg should use
                         ];
-                        $ffprobe = FFProbe::create($config);
+                        $ffprobe =  FFProbe::create($config);
                         foreach ($lessonList as $lesson) {
+                            //https://localhost/KLTN-Server/public/uploads/videos
+                            //$base_video_url = "https://localhost:8080/KLTN-Server-new2/public/uploads/videos".'/'
                             $base_video_url = "https://localhost/KLTN-Server/public/uploads/videos".'/'
                                 .$cs->course_id.'/'.$lesson->lesson_id.'.mp4';
                             $totalTime +=

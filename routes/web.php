@@ -11,9 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//Route::get('/', function () {
+ //   return view('welcome');
+//});
 
 Route::match(['get', 'post'], '/botman', 'BotManController@handle');
 Route::get('/botman/tinker', 'BotManController@tinker');
@@ -53,6 +53,25 @@ Route::get('/customerVerify', function (\Illuminate\Http\Request $request) {
 
 Route::get('/guest/course','GuestDetailCourseController@getDetailCourse');
 
+Route::get('/admin/statistical',"AdminStatisticalController@getInfoStatistical");
+ //hung
+Route::get('/admin/detailstatistical',"AdminStatisticalController@getDetailInfoStatisticalPer");
+
+Route::get('/admin/coursestatistical',"AdminStatisticalController@getInfoCourseSatistical");
+Route::get('/admin/getlistcourse',"AdminCourseController@getListCourse");
+Route::delete('/admin/unactivecourse',"AdminCourseController@unactiveCourse");
+Route::get('/admin/activecourse',"AdminCourseController@activeCourse");
+
+Route::get('/admin/getlistpricetier','AdminPriceController@getListPriceTier');
+Route::delete('/admin/deletepricetier','AdminPriceController@deletePricetier');
+Route::get("/admin/insertpricetier","AdminPriceController@insertPricetier");
+
+Route::get('/admin/getlistcoursebyprice','AdminPriceController@getListCoursebyPrice');
+
+Route::get('/admin/getlistmoneytype','AdminPriceController@getListMoneytype');
+
+Route::get('/admin/getlistcoursebymoneytype','AdminPriceController@getListCoursebyMoneytype');
+Route::delete('/admin/deletemoneytype','AdminPriceController@deleteMoneytype');
 Route::group(['middleware' => 'jwt.myAuth'], function () {
     Route::get('/getUser', 'UserController@getUserInfo');
     Route::get('/test', function (\Illuminate\Http\Request $request) {
@@ -85,6 +104,8 @@ Route::group(['middleware' => 'jwt.myAuth'], function () {
     Route::patch('/admin/bot/message', "ChatBotController@updateMessageBot");
     Route::delete('/admin/bot/message', "ChatBotController@deleteMessageBot");
 
+
+   
     // user role
 
     Route::get('/user','UserController@getUserInfo');
